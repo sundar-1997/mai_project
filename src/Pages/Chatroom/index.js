@@ -23,7 +23,6 @@ import { styled } from "@mui/system";
 import { FiSend, FiSearch , FiMessageSquare } from "react-icons/fi";
 import { BsEmojiSmile } from "react-icons/bs";
 import Picker from "emoji-picker-react";
-import { format } from "date-fns";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -44,52 +43,40 @@ const StyledPaper = styled(Paper)(({ theme, mode }) => ({
   boxShadow: '1px 3px 10px 13px rgb(121 145 183)',
 }));
 
-const MessageContainer = styled(Box)(({ isOwnMessage, theme, mode }) => ({
-  display: "flex",
-  justifyContent: isOwnMessage ? "flex-end" : "flex-start",
-  marginBottom: "1rem",
-  "& .message": {
-    maxWidth: "70%",
-    padding: "0.8rem",
-    borderRadius: "1rem",
-    backgroundColor: isOwnMessage
-      ? mode === "dark"
-        ? "#0d47a1"
-        : "#1976d2"
-      : mode === "dark"
-      ? "#424242"
-      : "#f5f5f5",
-    color: isOwnMessage ? "#ffffff" : mode === "dark" ? "#ffffff" : "#000000"
-  }
-}));
-
-
-
 const ChatApp = () => {
   const classes = useStyles();
-   const navigate = useNavigate();
-    const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isConnected, setIsConnected] = useState(true);
   const messagesEndRef = useRef(null);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  
+ 
+// getting user details from redux
+
 const userName = useSelector(state => state.AuthReducer.username || "");
 const userId = useSelector(state => state.AuthReducer.userid || "");
 const token = useSelector(state => state.AuthReducer.token || "");
+
+// web socket initialization
 
 const socket = io(CUSTOM_CONSTANTS.API_BASE_URL, {
   query: {
     authtoken: `Bearer ${token}`, // Replace with actual token
   },
  transports: ["polling", "websocket"],
+ reconnection: true,
+ reconnectionAttempts: 5,
+ reconnectionDelay: 3000,
 });
+
+// let the socket connect ro retrive the messages
 
 useEffect(() => {
   // Join room when component mounts
@@ -101,17 +88,23 @@ useEffect(() => {
     setUsername(userName);
 }, [messages]);
 
+// socket emits and listens with userId and messages dependencies
+
 useEffect(() => {
 
 socket.on("connect", () => {
+  setIsConnected(true);
   console.log("Connected to WebSocket Server, ID:", socket.id);
 });
-
-console.log(socket.listeners("receiveMessage"));
 
 socket.on("receiveMessage", (data) => {
   console.log("Received message:", data);
   setMessages(data); // Ensure previous state is used
+});
+
+socket.on("disconnect", () => {
+  setIsConnected(false);
+  dispatch(showSnackbar({ message: "Connection lost! Trying to reconnect...", variant: "error" }));
 });
 
 return () => {
@@ -119,8 +112,9 @@ return () => {
 };
 }, [userId,messages]);
 
+// handle a message send to emit send message and store the data on backend
 
-  const handleSendMessage = () => {
+const handleSendMessage = () => {
     if (message.trim()) {
       const newMessage = {
         text: message,
@@ -131,9 +125,9 @@ return () => {
       socket.emit("sendMessage", newMessage);
       setMessage("");
     }
-  };
+};
 
-
+// handle logout functionlity with clear local storage
 
 const handleLogout = () => {
       dispatch(showLoader("Loading please wait..."));
@@ -172,9 +166,13 @@ const handleLogout = () => {
       logoutApi.logoutbyid(userId).then(onSuccess, onFailure);
 };
 
+// handle search 
+
 const filteredMessages = messages.filter(msg =>
   msg.text && msg.text.toLowerCase().includes(searchQuery.toLowerCase())
 );
+
+// handle emoji picker visibility
 
 const onEmojiClick = (event) => {
     setMessage(prevMessage => prevMessage + event.emoji);
@@ -184,6 +182,8 @@ const onEmojiClick = (event) => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }} className={classes.chatRoom} >
       <StyledPaper elevation={3}>
+
+       {/* Chat headers */}
         <Box sx={{ p: 2, borderBottom: 1, borderColor: "divider" }}>
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
@@ -220,6 +220,7 @@ const onEmojiClick = (event) => {
           />
         </Box>
 
+       {/*Chat body */}
         <List sx={{ flexGrow: 1, overflow: "auto", p: 2 }} className={classes.chatList} >
           {(searchQuery ? filteredMessages : messages).map((msg, index) => (
     <Box key={index} sx={{ display: "flex", flexDirection: "column", mb: 1 }}>
@@ -245,7 +246,8 @@ const onEmojiClick = (event) => {
          ))}
           <div ref={messagesEndRef} />
         </List>
-
+        
+        {/* Message senders*/}   
         <Box sx={{ p: 2, borderTop: 1, borderColor: "divider" }}>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs>
@@ -279,6 +281,7 @@ const onEmojiClick = (event) => {
             </Grid>
           </Grid>
         </Box>
+
       </StyledPaper>
     </Container>
   );
