@@ -11,6 +11,8 @@ const auth = require("../middlewares/auth.js");
 const userServices = require("../services/apiServices/userServices.js");
 
 module.exports = (io) => {
+
+  // io authentication
   io.use(async (socket, next) => {
       try {
           const token = socket.handshake.query.authtoken;
@@ -28,6 +30,7 @@ module.exports = (io) => {
       }
   });
 
+  // io connection
   io.on("connection", async (socket) => {
 
       console.log("A user is connected");
@@ -58,11 +61,7 @@ module.exports = (io) => {
       io.emit("receiveMessage", allmessages); 
 
       });
-
-      socket.on("typing", ({isTyping }) => {
-        io.to(receiverId).emit("typingStatus", { senderId, isTyping });
-      });
-
+      
       socket.on("disconnect", () => {
           console.log("User disconnected");
       });
