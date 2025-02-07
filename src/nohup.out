@@ -1,0 +1,121 @@
+
+> unico@1.0.0 start
+> node-dev src/app.js
+
+Server Started At 4500
+Connected to mongodb://127.0.0.1:27017/taxiDB
+Error adding default business settings: Error: businessSetting validation failed: autoAssign: Cast to Number failed for value "true" (type string) at path "autoAssign", distanceUnit: `km` is not a valid enum value for path `distanceUnit`., timeZoneOffset: Path `timeZoneOffset` is required.
+    at ValidationError.inspect (/var/www/html/taxi-application/node_modules/mongoose/lib/error/validation.js:50:26)
+    at formatValue (node:internal/util/inspect:805:19)
+    at inspect (node:internal/util/inspect:364:10)
+    at formatWithOptionsInternal (node:internal/util/inspect:2279:40)
+    at formatWithOptions (node:internal/util/inspect:2141:10)
+    at console.value (node:internal/console/constructor:352:14)
+    at console.warn (node:internal/console/constructor:385:61)
+    at addDefaultBusinessSettings (/var/www/html/taxi-application/src/starters/businessSettingsConfig.js:30:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  errors: {
+    autoAssign: CastError: Cast to Number failed for value "true" (type string) at path "autoAssign"
+        at SchemaNumber.cast (/var/www/html/taxi-application/node_modules/mongoose/lib/schema/number.js:380:11)
+        at SchemaType.applySetters (/var/www/html/taxi-application/node_modules/mongoose/lib/schematype.js:1220:12)
+        at model.$set (/var/www/html/taxi-application/node_modules/mongoose/lib/document.js:1411:22)
+        at model.$set (/var/www/html/taxi-application/node_modules/mongoose/lib/document.js:1113:16)
+        at model.Document (/var/www/html/taxi-application/node_modules/mongoose/lib/document.js:164:12)
+        at model.Model (/var/www/html/taxi-application/node_modules/mongoose/lib/model.js:123:12)
+        at new model (/var/www/html/taxi-application/node_modules/mongoose/lib/model.js:4689:15)
+        at /var/www/html/taxi-application/node_modules/mongoose/lib/model.js:2915:18
+        at Array.map (<anonymous>)
+        at Function.create (/var/www/html/taxi-application/node_modules/mongoose/lib/model.js:2904:30)
+        at addDefaultBusinessSettings (/var/www/html/taxi-application/src/starters/businessSettingsConfig.js:24:35)
+        at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+      stringValue: '"true"',
+      messageFormat: undefined,
+      kind: 'Number',
+      value: 'true',
+      path: 'autoAssign',
+      reason: AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+      
+        assert.ok(!isNaN(val))
+      
+          at castNumber (/var/www/html/taxi-application/node_modules/mongoose/lib/cast/number.js:27:10)
+          at SchemaNumber.cast (/var/www/html/taxi-application/node_modules/mongoose/lib/schema/number.js:378:12)
+          at SchemaType.applySetters (/var/www/html/taxi-application/node_modules/mongoose/lib/schematype.js:1220:12)
+          at model.$set (/var/www/html/taxi-application/node_modules/mongoose/lib/document.js:1411:22)
+          at model.$set (/var/www/html/taxi-application/node_modules/mongoose/lib/document.js:1113:16)
+          at model.Document (/var/www/html/taxi-application/node_modules/mongoose/lib/document.js:164:12)
+          at model.Model (/var/www/html/taxi-application/node_modules/mongoose/lib/model.js:123:12)
+          at new model (/var/www/html/taxi-application/node_modules/mongoose/lib/model.js:4689:15)
+          at /var/www/html/taxi-application/node_modules/mongoose/lib/model.js:2915:18
+          at Array.map (<anonymous>)
+          at Function.create (/var/www/html/taxi-application/node_modules/mongoose/lib/model.js:2904:30)
+          at addDefaultBusinessSettings (/var/www/html/taxi-application/src/starters/businessSettingsConfig.js:24:35)
+          at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+        generatedMessage: true,
+        code: 'ERR_ASSERTION',
+        actual: false,
+        expected: true,
+        operator: '=='
+      },
+      valueType: 'string'
+    },
+    distanceUnit: ValidatorError: `km` is not a valid enum value for path `distanceUnit`.
+        at validate (/var/www/html/taxi-application/node_modules/mongoose/lib/schematype.js:1365:13)
+        at SchemaType.doValidate (/var/www/html/taxi-application/node_modules/mongoose/lib/schematype.js:1349:7)
+        at /var/www/html/taxi-application/node_modules/mongoose/lib/document.js:2947:18
+        at process.processTicksAndRejections (node:internal/process/task_queues:77:11) {
+      properties: [Object],
+      kind: 'enum',
+      path: 'distanceUnit',
+      value: 'km',
+      reason: undefined,
+      [Symbol(mongoose:validatorError)]: true
+    },
+    timeZoneOffset: ValidatorError: Path `timeZoneOffset` is required.
+        at validate (/var/www/html/taxi-application/node_modules/mongoose/lib/schematype.js:1365:13)
+        at SchemaType.doValidate (/var/www/html/taxi-application/node_modules/mongoose/lib/schematype.js:1349:7)
+        at /var/www/html/taxi-application/node_modules/mongoose/lib/document.js:2947:18
+        at process.processTicksAndRejections (node:internal/process/task_queues:77:11) {
+      properties: [Object],
+      kind: 'required',
+      path: 'timeZoneOffset',
+      value: undefined,
+      reason: undefined,
+      [Symbol(mongoose:validatorError)]: true
+    }
+  },
+  _message: 'businessSetting validation failed'
+}
+Default settings added.
+Default Payment Settings Added.
+Default legal settings added.
+
+> unico@1.0.0 start
+> node-dev src/app.js
+
+Server Started At 5500
+Connected to mongodb+srv://sundar:IjXmCJs7C5CYQNcZ@taxidb.3yw8i.mongodb.net/twytchDB
+process.env.SITE_LOGO uploads/business_logo.png
+Payment Settings Already Exist. No changes needed.
+Legal Settings Already Exist. No changes needed.
+Settings getting updated. No changes needed.
+Business settings already exist. No changes needed.
+Estimated settings getting updated. No changes needed.
+[INFO] 08:20:31 Restarting: /var/www/html/twytch/Backend/node_modules/dotenv/package.json has been modified
+Server Started At 5500
+Connected to mongodb+srv://sundar:IjXmCJs7C5CYQNcZ@taxidb.3yw8i.mongodb.net/twytchDB
+process.env.SITE_LOGO uploads/business_logo.png
+Payment Settings Already Exist. No changes needed.
+Settings getting updated. No changes needed.
+Business settings already exist. No changes needed.
+Legal Settings Already Exist. No changes needed.
+Estimated settings getting updated. No changes needed.
+[INFO] 08:31:50 Restarting: /var/www/html/twytch/Backend/src/config/mongoDbConfig.js has been modified
+process.env.MONGODB_URL--> mongodb+srv://sundar:IjXmCJs7C5CYQNcZ@taxidb.3yw8i.mongodb.net/twytchDB
+Server Started At 5500
+Connected to mongodb+srv://sundar:IjXmCJs7C5CYQNcZ@taxidb.3yw8i.mongodb.net/twytchDB
+process.env.SITE_LOGO uploads/business_logo.png
+Payment Settings Already Exist. No changes needed.
+Settings getting updated. No changes needed.
+Business settings already exist. No changes needed.
+Legal Settings Already Exist. No changes needed.
+Estimated settings getting updated. No changes needed.
